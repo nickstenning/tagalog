@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 from tagalog import __version__
 
-requirements = []
+requirements = ['redis==2.7.2']
 
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
@@ -33,6 +33,7 @@ setup(
     install_requires=requirements,
     entry_points={
         'console_scripts': [
+            'logship=tagalog.command.logship:main',
             'logstamp=tagalog.command.logstamp:main',
             'logtag=tagalog.command.logtag:main',
             'logtext=tagalog.command.logtext:main'

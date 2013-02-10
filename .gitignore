@@ -1,6 +1,7 @@
 *.pyc
 *.pyo
 /cover
+/dist
 /.coverage
 /.env
 /.tox

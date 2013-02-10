@@ -48,6 +48,27 @@ field, you can also add a list of tags to each document::
 
 .. _Logstash: http://logstash.net/
 
+Probably the most useful tool in the box, however, is ``logship``, which does
+everything ``logtag`` does, but instead of simply printing the log data to
+STDOUT, it ships it somewhere else. In the future, I expect logship to be able
+to send logging data to a number of different kinds of destination. At the
+moment, it will connect to one or more Redis servers and will ``LPUSH`` the
+logs onto a Redis list key of your choice.::
+
+    $ ruby myapp.rb | logship -k mylogs -u redis://redis-1.internal:7777 redis://redis-2.internal:7778 redis://redis-3.internal:7779
+
+Do ``logship -h`` to see available options.
+
+**NB**: ``logship`` is intended to be robust against failure of the log
+recipients. If it fails to submit a log entry to one of the redis servers in
+its list, it will try the next one. If it cannot connect to any of them, it
+will print a warning to STDERR but will otherwise carry on as normal. In the
+event that it cannot submit to any server, it will simply drop the log entries
+to avoid building up a backlog that could later result in a `thundering
+herd`_.
+
+.. _thundering herd: http://en.wikipedia.org/wiki/Thundering_herd_problem
+
 Lastly, there is ``logtext``, which does roughly the reverse of ``logtag``. It
 reads JSON documents on STDIN and translates them back into plain text::
 
@@ -55,12 +76,6 @@ reads JSON documents on STDIN and translates them back into plain text::
     1
     2
     3
-
-TODO
-----
-
-The critical missing part at the moment is a way of sending the logs somewhere
-else. Watch this space for ``logship``...
 
 License
 -------
