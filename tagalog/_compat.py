@@ -1,7 +1,7 @@
 try:
     from urlparse import urlparse
 except ImportError: # Python3
-    from urllib import parse as urlparse
+    from urllib.parse import urlparse
 
 try:
     _xrange = xrange
