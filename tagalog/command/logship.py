@@ -10,11 +10,21 @@ from tagalog import shipper
 parser = argparse.ArgumentParser(description=textwrap.dedent("""
     Ship log data from STDIN to somewhere else, timestamping and preprocessing
     each log entry into a JSON document along the way."""))
-parser.add_argument('-t', '--tags', nargs='+')
-parser.add_argument('-s', '--shipper', default='redis')
+parser.add_argument('-t', '--tags', nargs='+',
+                    help='Tag each request with the specified string tags')
+parser.add_argument('-s', '--shipper', default='redis',
+                    help='Select the shipper to be used to ship logs')
+parser.add_argument('--no-stamp', action='store_true')
+parser.add_argument('--bulk', action='store_true',
+                    help='Send log data in elasticsearch bulk format')
+parser.add_argument('--bulk-index', default='logs',
+                    help='Name of the elasticsearch index (default: logs)')
+parser.add_argument('--bulk-type', default='message',
+                    help='Name of the elasticsearch type (default: message)')
+
+# TODO: make these the responsibility of the redis shipper
 parser.add_argument('-k', '--key', default='logs')
 parser.add_argument('-u', '--urls', nargs='+', default=['redis://localhost:6379'])
-parser.add_argument('--no-stamp', action='store_true')
 
 def main():
     args = parser.parse_args()
@@ -26,7 +36,11 @@ def main():
     if args.tags:
         msgs = tag(msgs, args.tags)
     for msg in msgs:
-        shpr.ship(json.dumps(msg))
+        payload = json.dumps(msg)
+        if args.bulk:
+            command = json.dumps({'index': {'_index': args.bulk_index, '_type': args.bulk_type}})
+            payload = '{0}\n{1}\n'.format(command, payload)
+        shpr.ship(payload)
 
 if __name__ == '__main__':
     main()
