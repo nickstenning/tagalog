@@ -9,7 +9,8 @@ def test_happy_path_for_tagging():
               stdout=PIPE,
               stdin=PIPE)
     data_out, _ = p.communicate()
-    assert_equal(u'{\"@message\": \"hello\", \"@tags\": [\"handbags\"]}\n', data_out)
+    assert_equal('{\"@message\": \"hello\", \"@tags\": [\"handbags\"]}\n',
+                 data_out.decode("utf-8"))
 
 def test_happy_path_for_single_field():
     p = Popen('echo hello | logtag --no-stamp -f handbags=great',
@@ -17,8 +18,8 @@ def test_happy_path_for_single_field():
               stdout=PIPE,
               stdin=PIPE)
     data_out, _ = p.communicate()
-    assert_equal(u'{\"@message\": \"hello\", \"@handbags\": \"great\"}\n', 
-                 data_out)
+    assert_equal('{\"@message\": \"hello\", \"@handbags\": \"great\"}\n',
+                 data_out.decode("utf-8"))
 
 
 def test_happy_path_for__multi_field():
@@ -27,6 +28,6 @@ def test_happy_path_for__multi_field():
               stdout=PIPE,
               stdin=PIPE)
     data_out, _ = p.communicate()
-    assert_in(u'\"@why\": \"because\"', data_out)
-    assert_in(u'\"@message\": \"hello\"', data_out)
-    assert_in(u'\"@handbags\": \"great\"', data_out)
+    assert_in('\"@why\": \"because\"', data_out.decode("utf-8"))
+    assert_in('\"@message\": \"hello\"', data_out.decode("utf-8"))
+    assert_in('\"@handbags\": \"great\"', data_out.decode("utf-8"))
