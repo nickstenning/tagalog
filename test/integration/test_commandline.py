@@ -1,6 +1,12 @@
 from __future__ import unicode_literals
-from ..helpers import assert_equal, fixture, assert_in
+from ..helpers import assert_equal, fixture, assert_true
 from subprocess import Popen, PIPE
+
+try:
+  import assert_in
+except ImportError:
+  def assert_in(a, b):
+    assert_true(a in b)
 
 def test_happy_path_for_tagging():
     p = Popen('echo hello | logtag --no-stamp -t handbags',
@@ -29,4 +35,3 @@ def test_happy_path_for__multi_field():
     assert_in(u'\"@why\": \"because\"', data_out)
     assert_in(u'\"@message\": \"hello\"', data_out)
     assert_in(u'\"@handbags\": \"great\"', data_out)
-    
