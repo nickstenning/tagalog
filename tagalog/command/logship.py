@@ -12,6 +12,8 @@ parser = argparse.ArgumentParser(description=textwrap.dedent("""
     each log entry into a JSON document along the way."""))
 parser.add_argument('-t', '--tags', nargs='+',
                     help='Tag each request with the specified string tags')
+parser.add_argument('-f', '--fields', nargs='+',
+                    help='Add key=value fields specified to each request')
 parser.add_argument('-s', '--shipper', default='redis',
                     help='Select the shipper to be used to ship logs')
 parser.add_argument('--no-stamp', action='store_true')
@@ -35,6 +37,8 @@ def main():
         msgs = stamp(msgs)
     if args.tags:
         msgs = tag(msgs, args.tags)
+    if args.fields:
+        msgs = fields(msgs, args.fields)
     for msg in msgs:
         payload = json.dumps(msg)
         if args.bulk:

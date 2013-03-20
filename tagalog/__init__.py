@@ -4,8 +4,8 @@ import os
 
 from tagalog import io
 
-__all__ = ['io', 'stamp', 'tag']
-__version__ = '0.2.2'
+__all__ = ['io', 'stamp', 'tag', 'fields']
+__version__ = '0.2.3'
 
 # Use UTF8 for stdin, stdout, stderr
 os.environ['PYTHONIOENCODING'] = 'utf-8'
@@ -25,6 +25,34 @@ def stamp(iterable, key='@timestamp'):
     for item in iterable:
         item[key] = now()
         yield item
+
+def fields(iterable, fields=None):
+    """
+    Add a set of fields to each item in ``iterable``. The set of fields have a
+    key=value format. '@' are added to the front of each key.
+    """
+    if not fields:
+        for item in iterable:
+            yield item
+
+    prepared_fields = _prepare_fields(fields)
+
+    for item in iterable:
+        yield _process_fields(item, prepared_fields)
+
+
+def _process_fields(item, fields):
+    item.update(fields)
+    return item
+
+def _prepare_fields(fields):
+    prepared_fields = {}
+
+    for field in fields:
+        split_field = field.split('=', 1)
+        if len(split_field) > 1:
+          prepared_fields[split_field[0]] = split_field[1][:]
+    return { '@fields': prepared_fields }
 
 
 def tag(iterable, tags=None, key='@tags'):
