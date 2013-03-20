@@ -1,0 +1,32 @@
+from ..helpers import assert_equal
+from tagalog import fields
+
+
+def test_no_fields():
+    data = [{'@message': 'one'},
+            {'@message': 'two'}]
+    out = fields(data)
+
+    assert_equal(next(out), {'@message': 'one'})
+    assert_equal(next(out), {'@message': 'two'})
+
+
+def test_single_field():
+    data = [{'@message': 'one'},
+            {'@message': 'two'}]
+    out = fields(data, ['foobar=baz'])
+
+    assert_equal(next(out), {'@message': 'one',
+                              '@foobar': 'baz'})
+    assert_equal(next(out), {'@message': 'two',
+                              '@foobar': 'baz'})
+
+def test_multiple_fields_field():
+    data = [{'@message': 'one'},
+            {'@message': 'two'}]
+    out = fields(data, ['foobar=baz', 'sausage=bacon'])
+
+    assert_equal(next(out), {'@message': 'one',
+                              '@foobar': 'baz', '@sausage': 'bacon'})
+    assert_equal(next(out), {'@message': 'two',
+                              '@foobar': 'baz', '@sausage': 'bacon'})

@@ -26,6 +26,26 @@ def stamp(iterable, key='@timestamp'):
         item[key] = now()
         yield item
 
+def fields(iterable, fields=None):
+    """
+    Add a set of fields to each item in ``iterable``. The set of fields have a
+    key=value format. '@' are added to the front of each key.
+    """
+    if not fields:
+        for item in iterable:
+            yield item
+
+    for item in iterable:
+        yield _process_fields(item, fields)
+
+
+def _process_fields(item, fields):
+    for fieldPair in fields:
+        key, _, value =  fieldPair.partition('=')
+        item['@' + key] = value[:]
+
+    return item
+
 
 def tag(iterable, tags=None, key='@tags'):
     """
