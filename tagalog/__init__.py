@@ -35,16 +35,23 @@ def fields(iterable, fields=None):
         for item in iterable:
             yield item
 
+    prepared_fields = _prepare_fields(fields)
+
     for item in iterable:
-        yield _process_fields(item, fields)
+        yield _process_fields(item, prepared_fields)
 
 
 def _process_fields(item, fields):
-    for fieldPair in fields:
-        key, _, value =  fieldPair.partition('=')
-        item['@' + key] = value[:]
-
+    item.update(fields)
     return item
+
+def _prepare_fields(fields):
+    prepared_fields = {}
+
+    for field in fields:
+        field_name, _, field_value =  field.partition('=')
+        prepared_fields['@' + field_name] = field_value[:]
+    return prepared_fields
 
 
 def tag(iterable, tags=None, key='@tags'):
