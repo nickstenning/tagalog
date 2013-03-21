@@ -49,8 +49,9 @@ def _prepare_fields(fields):
     prepared_fields = {}
 
     for field in fields:
-        field_name, _, field_value =  field.partition('=')
-        prepared_fields['@' + field_name] = field_value[:]
+        split_field = field.split('=', 1)
+        if len(split_field) > 1:
+          prepared_fields[split_field[0]] = split_field[1][:]
     return prepared_fields
 
 

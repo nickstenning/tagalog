@@ -17,7 +17,7 @@ def test_single_field():
               stdout=PIPE,
               stdin=PIPE)
     data_out, _ = p.communicate()
-    assert_equal('{\"@message\": \"hello\", \"@handbags\": \"great\"}\n',
+    assert_equal('{\"@message\": \"hello\", \"handbags\": \"great\"}\n',
                  data_out.decode("utf-8"))
 
 def test_multiple_fields():
@@ -26,6 +26,6 @@ def test_multiple_fields():
               stdout=PIPE,
               stdin=PIPE)
     data_out, _ = p.communicate()
-    assert_in('\"@why\": \"because\"', data_out.decode("utf-8"))
+    assert_in('\"why\": \"because\"', data_out.decode("utf-8"))
     assert_in('\"@message\": \"hello\"', data_out.decode("utf-8"))
-    assert_in('\"@handbags\": \"great\"', data_out.decode("utf-8"))
+    assert_in('\"handbags\": \"great\"', data_out.decode("utf-8"))
