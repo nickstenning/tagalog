@@ -17,9 +17,9 @@ def test_single_field():
     out = fields(data, ['foobar=baz'])
 
     assert_equal(next(out), {'@message': 'one',
-                              '@foobar': 'baz'})
+                             '@foobar': 'baz'})
     assert_equal(next(out), {'@message': 'two',
-                              '@foobar': 'baz'})
+                             '@foobar': 'baz'})
 
 
 def test_multiple_fields_field():
@@ -28,22 +28,22 @@ def test_multiple_fields_field():
     out = fields(data, ['foobar=baz', 'sausage=bacon'])
 
     assert_equal(next(out), {'@message': 'one',
-                              '@foobar': 'baz', '@sausage': 'bacon'})
+                             '@foobar': 'baz', '@sausage': 'bacon'})
     assert_equal(next(out), {'@message': 'two',
-                              '@foobar': 'baz', '@sausage': 'bacon'})
+                             '@foobar': 'baz', '@sausage': 'bacon'})
 
 def test_existing_fields_are_overwritten_even_message():
     data = [{'@message': 'hello', '@existing': 'field'}]
     out = fields(data, ['existing=wood', 'message=chainsawed'])
 
     assert_equal(next(out), {'@message': 'chainsawed',
-                              '@existing': 'wood'})
+                             '@existing': 'wood'})
 
 def test_field_without_equals_has_no_value():
     data = [{'@message': 'hello'}]
     out = fields(data, ['noequals', 'field=good'])
 
     assert_equal(next(out), {'@message': 'hello',
-                              '@field': 'good', 
-                              '@noequals': ''})
+                             '@field': 'good',
+                             '@noequals': ''})
 
