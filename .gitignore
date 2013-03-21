@@ -6,4 +6,4 @@
 /.env
 /.tox
 /*.egg-info
-
+/build
