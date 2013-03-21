@@ -52,7 +52,7 @@ def _prepare_fields(fields):
         split_field = field.split('=', 1)
         if len(split_field) > 1:
           prepared_fields[split_field[0]] = split_field[1][:]
-    return prepared_fields
+    return { '@fields': prepared_fields }
 
 
 def tag(iterable, tags=None, key='@tags'):
