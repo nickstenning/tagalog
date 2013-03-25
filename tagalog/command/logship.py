@@ -4,7 +4,7 @@ import json
 import sys
 import textwrap
 
-from tagalog import io, stamp, tag
+from tagalog import io, stamp, tag, fields
 from tagalog import shipper
 
 parser = argparse.ArgumentParser(description=textwrap.dedent("""
