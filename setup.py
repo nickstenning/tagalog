@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 from tagalog import __version__
 
-requirements = ['redis==2.7.2']
+requirements = ['redis==4.4.4']
 
 if sys.version_info[:2] < (2, 7):
     requirements.append('argparse')
